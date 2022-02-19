@@ -35,11 +35,15 @@ impl InvertedIndex {
         }
     }
 
-    pub fn search(&self, query: &str) -> Vec<Vec<usize>>{
+    pub fn search(&self, query: &str) -> Vec<usize> {
         let mut result = vec![];
         for token in analyze(query) {
             if let Some(data) = self.data.get(&token as &str) {
-                result.push(data.to_owned())
+                if result.len() == 0 {
+                    result = data.to_owned();
+                } else {
+                    result = intersection(result, data.to_vec())
+                }
             }
         }
 
@@ -77,6 +81,30 @@ fn stopword_filter(tokens: &Vec<String>, stop_words: HashMap<&str, &str>) -> Vec
         }
     }
     new_tokens
+}
+
+fn intersection(a: Vec<usize>, b: Vec<usize>) -> Vec<usize> {
+    let mut max_len = a.len();
+    if b.len() > max_len {
+        max_len = b.len();
+    }
+
+    let mut result: Vec<usize> = vec![0; max_len];
+    let mut i = 0;
+    let mut j = 0;
+    while i < a.len() && j < b.len() {
+        if a[i] < b[i] {
+            i += 1;
+        } else if a[i] < b[j] {
+            j += 1;
+        } else {
+            result.push(a[i]);
+            i += 1;
+            j += 1;
+        }
+    }
+
+    result
 }
 
 fn main() {

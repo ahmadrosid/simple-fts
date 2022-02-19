@@ -27,9 +27,9 @@ impl InvertedIndex {
                     }
                     let mut new_ids = ids.to_owned();
                     new_ids.push(doc.id);
-                    self.data.insert(token.to_owned(), new_ids.to_vec());
+                    self.data.insert(token, new_ids);
                 } else {
-                    self.data.insert(token.to_owned(), vec![doc.id]);
+                    self.data.insert(token, vec![doc.id]);
                 }
             }
         }

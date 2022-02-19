@@ -62,7 +62,7 @@ fn analyze(text: &str) -> Vec<String> {
 
 fn tokenize(text: &str) -> Vec<String> {
     if text.is_empty() {
-        return vec!["".to_owned()];
+        return vec!["".to_string()];
     }
 
     text.chars()
